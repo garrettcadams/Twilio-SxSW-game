@@ -1,0 +1,13 @@
+.env
+venv
+bin
+build
+include
+lib
+.Python
+*.pyc
+*.project
+*.pydevproject
+*.pyo
+*.swp
+*.coverage

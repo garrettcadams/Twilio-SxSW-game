@@ -1,0 +1,17 @@
+[intro]
+text="You are planning your trip to SxSW 2013 and see there is a rocking party on the agenda for the Twilio community. To get on the RSVP list, you realize you must answer three questions correctly to prove your cloud communications street cred. Do you accept this challenge?"
+
+Options:
+    accept: part1
+    decline: sorry
+
+SMS options:
+    "Respond Y/N"
+
+
+[sorry]
+text="Sorry to see you go! Make sure to follow @twilio on Twitter for updates around SxSW 2013."
+
+
+[part1]
+text=""
