@@ -127,7 +127,7 @@ class TestGame(unittest.TestCase):
             self.assertIn('that is incorrect', game.response)
 
     def test_game_part3_success(self):
-        attempts = ['hello world', 'Hello World', 'HELLO WORLD'
+        attempts = ['hello world', 'Hello World', 'HELLO WORLD',
                     'Hello world', 'Hello World.', 'HELLO, WORLD']
         for attempt in attempts:
             game = new_game()
