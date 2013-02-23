@@ -11,6 +11,7 @@ class GameState:
         self.success_if = {'sms': [], 'voice': []}
         self.success = ''
         self.failure = ''
+        self.options = []
         self.pattern = re.compile('[\W_]+')
 
     def cleanup(self, input):
@@ -30,15 +31,18 @@ class GameState:
     def voice_success_if(self, options):
         self.set_success_if('voice', options)
 
+    def voice_options(self, options):
+        self.options = options
+
     def send_input(self, attempt):
         needle = self.cleanup(attempt)
         haystack = self.success_if[self.type]
-        #print ".send_input(%s): haystack: %s" % (attempt, str(haystack))
+        print ".send_input(%s): haystack: %s" % (attempt, str(haystack))
         if len(haystack) == 1 and haystack[0] is True:
             self.solved = True
         elif needle in haystack:
             self.solved = True
-        #print ".send_input(%s) = %s" % (attempt, str(self.solved))
+        print ".send_input(%s) = %s" % (attempt, str(self.solved))
 
 
 class NewGame:
@@ -71,8 +75,18 @@ class NewGame:
 
     def to_twiml(self, input):
         r = twiml.Response()
-        r.sms(input)
-        return(str(r))
+        if self.type is 'sms':
+            r.sms(input)
+            return(str(r))
+        elif self.type is 'voice':
+            r.say(input)
+            gather = r.gather()
+            for option in self.current_state.options:
+                text = 'Press %s' % (option)
+                gather.say(text)
+            return(str(r))
+        else:
+            return input
 
     def next(self, attempt=False):
         if not self.state:
@@ -94,12 +108,14 @@ def add_story_to_game(game):
     state = GameState('start')
     state.next = 'intro'
     state.sms_success_if([True])
+    state.voice_success_if([True])
     state.text_fail = False
     game.add_state(state)
 
     state = GameState('shortcut')
     state.next = 'part3'
     state.sms_success_if([True])
+    state.voice_success_if([True])
     state.text_fail = False
     game.add_state(state)
 
@@ -118,6 +134,9 @@ def add_story_to_game(game):
                   "Do you accept this challenge?")
     state.text_fail = message_sorry
     state.sms_success_if(['y', 'yes', 'ok', 'okay', 'sure'])
+    state.voice_options(['1 to accept',
+                         '2 to decline'])
+    state.voice_success_if(['1'])
     game.add_state(state)
 
     state = GameState('part1')
@@ -127,6 +146,10 @@ def add_story_to_game(game):
                   'Which TwiML verb ends a call?')
     state.text_fail = message_incorrect
     state.sms_success_if(['hangup', 'hang up'])
+    state.voice_options(['1 for Reject',
+                         '2 for Hangup',
+                         '3 for Leave'])
+    state.voice_success_if(['2'])
     game.add_state(state)
 
     state = GameState('part2')
@@ -136,6 +159,10 @@ def add_story_to_game(game):
                   'awarded the patent for the telephone?')
     state.text_fail = message_incorrect
     state.sms_success_if(['1876'])
+    state.voice_options(['1 for 18 76',
+                         '2 for 18 75',
+                         '3 for The patent is actually held by Elisha Gray'])
+    state.voice_success_if(['1'])
     game.add_state(state)
 
     state = GameState('part3')
@@ -143,7 +170,11 @@ def add_story_to_game(game):
     state.text = ("When initially testing your very first Twilio app, "
                   "what phrase is used to verify it is working correctly?")
     state.text_fail = message_incorrect
-    state.sms_success_if(['hello world'])
+    state.sms_success_if(['hello world', 'hello monkey'])
+    state.voice_options(['1 for popcorn',
+                         '2 for ahoy',
+                         '3 for hello monkey'])
+    state.voice_success_if(['3'])
     game.add_state(state)
 
     state = GameState('end')
@@ -152,6 +183,7 @@ def add_story_to_game(game):
                   "Register at: http://twiliosxsw2013.eventbrite.com "
                   "password: %s") % (game.konf.game_password)
     state.sms_success_if([True])
+    state.voice_success_if([True])
     game.add_state(state)
 
     return game

@@ -3,29 +3,32 @@ if sys.version_info < (2, 7):
     import unittest2 as unittest
 else:
     import unittest
-from konfig import Konfig
-from game import Game
+from game import create_game, add_story_to_game
 
 
 def new_game(configuration=False):
-    default = {'game_default_state': 'intro',
-               'game_active': 'true'}
+    default = {'default': 'start',
+               'active': 'true'}
     if not configuration:
         configuration = default
-    game = Game(type='voice')
-    game.konf = Konfig()
+    game = create_game(type='voice')
+    print "using configuration: ", configuration
     game.konf.use_dict(configuration)
+    game = add_story_to_game(game)
     return game
 
 
-class TestGame(unittest.TestCase):
+class TestGameViaVoice(unittest.TestCase):
 
     def test_game_starts_at_default_start(self):
-        game = new_game(configuration={'game_default_state': 'test'})
+        from game import GameState
+        game = new_game(configuration={'default': 'test'})
+        test = GameState('test')
+        game.add_state(test)
         self.assertEquals('test', game.state)
-        self.assertEquals('sms', game.type)
+        self.assertEquals('voice', game.type)
 
-    def test_game(self):
+    def test_game_via_voice(self):
         game = new_game()
         self.assertEquals('start', game.state)
 
@@ -43,17 +46,28 @@ class TestGame(unittest.TestCase):
 
         game.next('1')
         self.assertEquals('part3', game.state)
-        self.assertIn('one question away', game.text)
+        self.assertIn('what phrase is used to verify', game.response)
 
         game.next('3')
         self.assertEquals('end', game.state)
-        self.assertIn('Congratulations', game.text)
+        self.assertIn('Congratulations', game.response)
 
         game.next()
         self.assertEquals('end', game.state)
 
         game.next('1')
         self.assertEquals('end', game.state)
+
+    def test_game_returns_twiml(self):
+        game = new_game()
+        game.set_state('start')
+        game.next('play')
+        self.assertEquals('intro', game.state)
+        self.assertIn('Do you accept this challenge?', game.response)
+        self.assertIn('<Response>', game.response)
+        self.assertIn('<Gather', game.response)
+        self.assertIn('</Gather>', game.response)
+        self.assertIn('</Response>', game.response)
 
     def test_game_start(self):
         game = new_game()
@@ -65,9 +79,8 @@ class TestGame(unittest.TestCase):
         game.next('')
         self.assertEquals('intro', game.state)
         self.assertIn('Do you accept this challenge?', game.response)
-        self.assertIn('Press 1 for', game.response)
-        self.assertIn('Press 2 for', game.response)
-        self.assertIn('Press 3 for', game.response)
+        self.assertIn('Press 1 to', game.response)
+        self.assertIn('Press 2 to', game.response)
 
     def test_game_intro_success(self):
         attempts = ['1']
@@ -115,7 +128,7 @@ class TestGame(unittest.TestCase):
             game.set_state('part2')
             game.next(attempt)
             self.assertEquals('part3', game.state)
-            self.assertIn('one question away', game.text)
+            self.assertIn('what phrase is used to verify', game.response)
             self.assertIn('Press 1 for', game.response)
             self.assertIn('Press 2 for', game.response)
             self.assertIn('Press 3 for', game.response)
@@ -136,7 +149,7 @@ class TestGame(unittest.TestCase):
             game.set_state('part3')
             game.next(attempt)
             self.assertEquals('end', game.state)
-            self.assertIn('Congratulations', game.text)
+            self.assertIn('Congratulations', game.response)
 
     def test_game_part3_failure(self):
         attempts = ['1', '2', '4', '5', '99']
