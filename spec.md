@@ -29,6 +29,9 @@ intro
 1st response:
 [SMS] You are planning your trip to SxSW 2013 and see there is a rocking party on the agenda for the Twilio community. To get on the RSVP list, you realize you must answer three questions correctly to prove your cloud communications street cred. Do you accept this challenge? Respond Y/N
 
+[SMS 140]
+To get on the list for Twilio's SxSW party, you must answer three questions to prove your Twilio street cred. Do you accept this challenge?
+
 [Voice] You are planning your trip to SxSW 2013 and see there is a rocking party on the agenda for the Twilio community. To get on the RSVP list, you realize you must answer three questions correctly to prove your cloud communications street cred. Do you accept this challenge? 
 
 <Say> Press 1 to accept</Say>
@@ -66,7 +69,10 @@ If Respond Correctly:
 -----
 part2
 -----
-[SMS] Well party-seeker, you proved you know your TwiML but in order to gain access you must answer two more questions. In what year was Alexander Graham Bell awarded the patent for the telephone? 
+[SMS] Well party-seeker, you proved you know your TwiML but in order to gain access you must answer two more questions. In what year was Alexander Graham Bell awarded the patent for the telephone?
+
+[SMS 140]
+You have two questions remaining: In what year was Alexander Graham Bell awarded the patent for the telephone? 
 
 [Accepted Responses]
 1876
@@ -88,6 +94,9 @@ part3
 If Respond Correctly:
 [SMS] So party-seeker, you hold knowledge of telephony history alongside the Twilio API. You are just one question away from receiving the password.  
 
+[SMS 140]
+You're one question away! When initially testing your very first Twilio app, what phrase is used to verify it is working correctly? 
+
 [Voice] So party-seeker, you hold knowledge of telephony history alongside the Twilio API. You are just one question away from receiving the password.  
 
 If Respond Incorrectly:
@@ -98,6 +107,9 @@ If Respond Correctly:
 end
 -----
 [Voice+SMS] Congratulations, you have proven your alliance to cloud communications and we’d be honored to have you attend our SxSW private event. We will follow up with a link and password to register. Make sure to follow @twilio on Twitter for daily updates. 
+
+[SMS 140]
+Congratulations, we’d be honored to have you at our party. Register at: http://twiliosxsw2013.eventbrite.com with password: BBQisdelicious
 
 --->Send SMS with link and password
 
