@@ -97,40 +97,55 @@ def add_story_to_game(game):
     state.text_fail = False
     game.add_state(state)
 
-    message_sorry = 'Sorry to see you go!'
-    message_incorrect = 'that is incorrect'
+    message_sorry = ('Sorry to see you go! '
+                     'Make sure to follow @twilio on Twitter '
+                     'for updates around SxSW 2013.')
+    message_incorrect = ('Oh no, '
+                         'that is incorrect. Fear not! '
+                         'You can start from the beginning to try again.')
 
     state = GameState('intro')
     state.next = 'part1'
-    state.text = 'Do you accept this challenge?'
+    state.text = ("To get on the list for Twilio's SxSW party, "
+                  "you must answer three questions "
+                  "to prove your Twilio street cred. "
+                  "Do you accept this challenge?")
     state.text_fail = message_sorry
     state.sms_success_if(['y', 'yes', 'ok', 'okay', 'sure'])
     game.add_state(state)
 
     state = GameState('part1')
     state.next = 'part2'
-    state.text = 'Challenge accepted'
+    state.text = ('Challenge accepted. '
+                  'Answer this correctly to proceed. '
+                  'Which TwiML verb ends a call?')
     state.text_fail = message_incorrect
     state.sms_success_if(['hangup', 'hang up'])
     game.add_state(state)
 
     state = GameState('part2')
     state.next = 'part3'
-    state.text = 'In what year was Alexander'
+    state.text = ('You have two questions remaining: '
+                  'In what year was Alexander Graham Bell '
+                  'awarded the patent for the telephone?')
     state.text_fail = message_incorrect
     state.sms_success_if(['1876'])
     game.add_state(state)
 
     state = GameState('part3')
     state.next = 'end'
-    state.text = 'one question away'
+    state.text = ("You're one question away! "
+                  "When initially testing your very first Twilio app, "
+                  "what phrase is used to verify it is working correctly?")
     state.text_fail = message_incorrect
     state.sms_success_if(['hello world'])
     game.add_state(state)
 
     state = GameState('end')
     state.next = 'end'
-    state.text = 'Congratulations'
+    state.text = ("Congratulations, we'd be honored to have you at our party. "
+                  "Register at: http://twiliosxsw2013.eventbrite.com "
+                  "password: %s") % (game.konf.game_password)
     state.sms_success_if([True])
     game.add_state(state)
 
