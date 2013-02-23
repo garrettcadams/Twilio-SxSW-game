@@ -1,4 +1,5 @@
 import re
+from konfig import Konfig
 
 
 class GameState:
@@ -45,14 +46,29 @@ class GameState:
 class NewGame:
     def __init__(self, type):
         self.type = type
-        #self.konf = False
+        self.konf = Konfig()
         self.current_state = False
-        self.default = 'start'
         self.states = {}
+
+    @property
+    def default(self):
+        if self.konf.default:
+            return self.konf.default
+        else:
+            print "default() returning: 'start'"
+            return 'start'
+
+    @property
+    def state(self):
+        if not self.current_state:
+            self.set_state(self.default)
+        print "STATE: '%s'" % self.current_state.name
+        return self.current_state.name
 
     def add_state(self, state):
         state.type = self.type
         state.default = self.default
+        print "state.default: ", state.default
         self.states[state.name] = state
 
     def set_state(self, state_name):
@@ -68,17 +84,12 @@ class NewGame:
             self.current_state = self.states[self.default]
         print "Response is: '%s'" % self.response
 
-    @property
-    def state(self):
-        if not self.current_state:
-            self.set_state(self.default)
-        print "STATE: '%s'" % self.current_state.name
-        return self.current_state.name
-
 
 def create_game(type='sms'):
-    game = NewGame(type)
+    return NewGame(type)
 
+
+def add_story_to_game(game):
     state = GameState('start')
     state.next = 'intro'
     state.sms_success_if([True])

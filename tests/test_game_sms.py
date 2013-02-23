@@ -3,25 +3,28 @@ if sys.version_info < (2, 7):
     import unittest2 as unittest
 else:
     import unittest
-from konfig import Konfig
-from game import create_game
+from game import create_game, add_story_to_game
 
 
 def new_game(configuration=False):
-    default = {'default': 'intro',
+    default = {'default': 'start',
                'active': 'true'}
     if not configuration:
         configuration = default
     game = create_game(type='sms')
-    game.konf = Konfig()
+    print "using configuration: ", configuration
     game.konf.use_dict(configuration)
+    game = add_story_to_game(game)
     return game
 
 
 class TestGame(unittest.TestCase):
 
     def test_game_starts_at_default_start(self):
+        from game import GameState
         game = new_game(configuration={'default': 'test'})
+        test = GameState('test')
+        game.add_state(test)
         self.assertEquals('test', game.state)
         self.assertEquals('sms', game.type)
 
