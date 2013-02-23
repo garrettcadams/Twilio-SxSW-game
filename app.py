@@ -11,7 +11,7 @@ from game import add_story_to_game
 
 app = Flask(__name__)
 konf = Konfig()
-konf.use_dict({'mongo_url': 'localhost'})
+#konf.use_dict({'mongo_url': 'localhost'})
 
 mongo_database = konf.mongo_url
 connection = Connection(mongo_database)
