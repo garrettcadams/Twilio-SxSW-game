@@ -62,6 +62,17 @@ class TestGame(unittest.TestCase):
         game = new_game()
         self.assertEquals('start', game.state)
 
+    def test_game_returns_twiml(self):
+        game = new_game()
+        game.set_state('start')
+        game.next('play')
+        self.assertEquals('intro', game.state)
+        self.assertIn('Do you accept this challenge?', game.response)
+        self.assertIn('<Response>', game.response)
+        self.assertIn('<Sms>', game.response)
+        self.assertIn('</Sms>', game.response)
+        self.assertIn('</Response>', game.response)
+
     def test_game_intro(self):
         game = new_game()
         game.set_state('start')
