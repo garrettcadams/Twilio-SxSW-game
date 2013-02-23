@@ -97,6 +97,12 @@ def add_story_to_game(game):
     state.text_fail = False
     game.add_state(state)
 
+    state = GameState('shortcut')
+    state.next = 'part3'
+    state.sms_success_if([True])
+    state.text_fail = False
+    game.add_state(state)
+
     message_sorry = ('Sorry to see you go! '
                      'Make sure to follow @twilio on Twitter '
                      'for updates around SxSW 2013.')
