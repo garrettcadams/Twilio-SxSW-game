@@ -18,7 +18,7 @@ def new_game(configuration=False):
     return game
 
 
-class TestGame(unittest.TestCase):
+class TestGameViaSms(unittest.TestCase):
 
     def test_game_starts_at_default_start(self):
         from game import GameState
@@ -58,10 +58,6 @@ class TestGame(unittest.TestCase):
         game.next('test')
         self.assertEquals('end', game.state)
 
-    def test_game_start(self):
-        game = new_game()
-        self.assertEquals('start', game.state)
-
     def test_game_returns_twiml(self):
         game = new_game()
         game.set_state('start')
@@ -72,6 +68,10 @@ class TestGame(unittest.TestCase):
         self.assertIn('<Sms>', game.response)
         self.assertIn('</Sms>', game.response)
         self.assertIn('</Response>', game.response)
+
+    def test_game_start(self):
+        game = new_game()
+        self.assertEquals('start', game.state)
 
     def test_game_intro(self):
         game = new_game()
