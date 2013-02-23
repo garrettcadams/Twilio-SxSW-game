@@ -26,14 +26,10 @@ def get_id():
     return id
 
 
-@app.route("/")
-def hello():
-    return "Hello."
-
-
-@app.route("/sms", methods=['POST'])
-def sms():
-    game = create_game(type='sms')
+def play(game, input):
+    #FIXME: we shoudn't need to do this each time.
+    # Perhaps we create an sms and voice object at the start
+    # and pass the approprate one to this function?
     game = add_story_to_game(game)
 
     player_id = get_id()
@@ -46,14 +42,29 @@ def sms():
         player = players.find_one({'player_id': player_id})
     print "PLAYER: ", player
     game.set_state(player['state'])
-    game.next(str(request.form['Body']))
+    game.next(input)
     players.update(player, {'$set': {'state': game.state}})
     return game.response
 
 
+@app.route("/")
+def hello():
+    return "Hello."
+
+
+@app.route("/sms", methods=['POST'])
+def sms():
+    game = create_game(type='sms')
+    return play(game, str(request.form['Body']))
+
+
 @app.route("/voice", methods=['POST'])
 def voice():
-    pass
+    game = create_game(type='voice')
+    input = ''
+    if request.form['Digits']:
+        input = str(request.form['Digits'])
+    return play(game, input)
 
 if __name__ == "__main__":
     # Bind to PORT if defined, otherwise default to 5000.

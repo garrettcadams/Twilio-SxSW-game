@@ -99,6 +99,7 @@ class TestGameViaVoice(unittest.TestCase):
             game.next(attempt)
             self.assertEquals('start', game.state)
             self.assertIn('Sorry to see you go!', game.response)
+            self.assertNotIn('Press 1 for', game.response)
 
     def test_game_part1_success(self):
         attempts = ['2']
@@ -120,6 +121,7 @@ class TestGameViaVoice(unittest.TestCase):
             game.next(attempt)
             self.assertEquals('start', game.state)
             self.assertIn('that is incorrect', game.response)
+            self.assertNotIn('Press 1 for', game.response)
 
     def test_game_part2_success(self):
         attempts = ['1']
@@ -141,6 +143,7 @@ class TestGameViaVoice(unittest.TestCase):
             game.next('2')
             self.assertEquals('start', game.state)
             self.assertIn('that is incorrect', game.response)
+            self.assertNotIn('Press 1 for', game.response)
 
     def test_game_part3_success(self):
         attempts = ['3']
@@ -159,6 +162,7 @@ class TestGameViaVoice(unittest.TestCase):
             game.next(attempt)
             self.assertEquals('start', game.state)
             self.assertIn('that is incorrect', game.response)
+            self.assertNotIn('Press 1 for', game.response)
 
     def test_game_end(self):
         attempts = ['', '1', '2', '3', '4', '5', '99']
