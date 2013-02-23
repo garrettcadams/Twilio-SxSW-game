@@ -140,8 +140,7 @@ def add_story_to_game(game):
 
     state = GameState('part3')
     state.next = 'end'
-    state.text = ("You're one question away! "
-                  "When initially testing your very first Twilio app, "
+    state.text = ("When initially testing your very first Twilio app, "
                   "what phrase is used to verify it is working correctly?")
     state.text_fail = message_incorrect
     state.sms_success_if(['hello world'])

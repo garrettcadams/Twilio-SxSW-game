@@ -46,7 +46,7 @@ class TestGame(unittest.TestCase):
 
         game.next('1876')
         self.assertEquals('part3', game.state)
-        self.assertIn('one question away', game.response)
+        self.assertIn('what phrase is used to verify', game.response)
 
         game.next('hello world')
         self.assertEquals('end', game.state)
@@ -129,7 +129,7 @@ class TestGame(unittest.TestCase):
             game.set_state('part2')
             game.next(attempt)
             self.assertEquals('part3', game.state)
-            self.assertIn('one question away', game.response)
+            self.assertIn('what phrase is used to verify', game.response)
 
     def test_game_part2_failure(self):
         attempts = ['1976', 'test', 'testing', '123', '1 2 3', 'fake input']
