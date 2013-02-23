@@ -33,10 +33,12 @@ class GameState:
     def send_input(self, attempt):
         needle = self.cleanup(attempt)
         haystack = self.success_if[self.type]
+        #print ".send_input(%s): haystack: %s" % (attempt, str(haystack))
         if len(haystack) == 1 and haystack[0] is True:
             self.solved = True
         elif needle in haystack:
             self.solved = True
+        #print ".send_input(%s) = %s" % (attempt, str(self.solved))
 
 
 class NewGame:
@@ -73,6 +75,8 @@ class NewGame:
         return(str(r))
 
     def next(self, attempt=False):
+        if not self.state:
+            print "Error determining state"
         self.current_state.send_input(attempt)
         if self.current_state.solved:
             self.current_state = self.states[self.current_state.next]
