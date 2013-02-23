@@ -1,4 +1,12 @@
-Flask>=0.9
-twilio>=3.4.3
-mock>=0.8.0
-nose>=1.1.2
+Flask==0.9
+Jinja2==2.6
+Werkzeug==0.8.3
+distribute==0.6.24
+httplib2==0.7.7
+mock==1.0.1
+nose==1.2.1
+pymongo==2.4.2
+six==1.2.0
+twilio==3.4.3
+unittest2==0.5.1
+wsgiref==0.1.2
