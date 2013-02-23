@@ -1,5 +1,6 @@
 import re
 from konfig import Konfig
+from twilio import twiml
 
 
 class GameState:
@@ -29,14 +30,9 @@ class GameState:
     def voice_success_if(self, options):
         self.set_success_if('voice', options)
 
-    def to_twiml(self, type):
-        return self.text
-
     def send_input(self, attempt):
-        print "attempt: '%s'" % attempt
         needle = self.cleanup(attempt)
         haystack = self.success_if[self.type]
-        print "haystack for %s is %s" % (self.name, str(haystack))
         if len(haystack) == 1 and haystack[0] is True:
             self.solved = True
         elif needle in haystack:
@@ -55,34 +51,35 @@ class NewGame:
         if self.konf.default:
             return self.konf.default
         else:
-            print "default() returning: 'start'"
             return 'start'
 
     @property
     def state(self):
         if not self.current_state:
             self.set_state(self.default)
-        print "STATE: '%s'" % self.current_state.name
         return self.current_state.name
 
     def add_state(self, state):
         state.type = self.type
         state.default = self.default
-        print "state.default: ", state.default
         self.states[state.name] = state
 
     def set_state(self, state_name):
         self.current_state = self.states[state_name]
 
+    def to_twiml(self, input):
+        r = twiml.Response()
+        r.sms(input)
+        return(str(r))
+
     def next(self, attempt=False):
         self.current_state.send_input(attempt)
         if self.current_state.solved:
             self.current_state = self.states[self.current_state.next]
-            self.response = self.current_state.text
+            self.response = self.to_twiml(self.current_state.text)
         else:
-            self.response = self.current_state.text_fail
+            self.response = self.to_twiml(self.current_state.text_fail)
             self.current_state = self.states[self.default]
-        print "Response is: '%s'" % self.response
 
 
 def create_game(type='sms'):
