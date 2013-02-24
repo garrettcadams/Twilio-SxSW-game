@@ -96,6 +96,7 @@ class NewGame:
             self.current_state = self.states[self.current_state.next]
             self.response = self.to_twiml(self.current_state.text)
         else:
+            self.current_state.options = []
             self.response = self.to_twiml(self.current_state.text_fail)
             self.current_state = self.states[self.default]
 
