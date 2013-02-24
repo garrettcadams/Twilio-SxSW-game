@@ -21,8 +21,10 @@ players = db.players
 
 def get_id():
     id = str(uuid.uuid4())
-    if request.form['From'] and request.form['To']:
+    if 'From' in request.form and 'To' in request.form:
         id = "%s_%s" % (request.form['From'], request.form['To'])
+    elif 'Caller' in request.form and 'Caller' in request.form:
+        id = "%s_%s" % (request.form['Caller'], request.form['Called'])
     return id
 
 
