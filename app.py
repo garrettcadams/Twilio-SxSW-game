@@ -61,8 +61,8 @@ def sms():
 @app.route("/voice", methods=['POST'])
 def voice():
     game = create_game(type='voice')
-    input = ''
-    if request.form['Digits']:
+    input = ' '
+    if 'Digits' in request.form:
         input = str(request.form['Digits'])
     return play(game, input)
 
