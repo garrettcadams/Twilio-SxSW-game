@@ -125,7 +125,7 @@ def add_story_to_game(game):
                      'for updates around SxSW 2013.')
     message_incorrect = ('Oh no, '
                          'that is incorrect. Fear not! '
-                         'You can start from the beginning to try again.')
+                         'Text "OK" to try again from the beginning.')
 
     state = GameState('intro')
     state.next = 'part1'
