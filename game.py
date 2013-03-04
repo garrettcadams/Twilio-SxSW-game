@@ -113,6 +113,13 @@ def add_story_to_game(game):
     state.text_fail = False
     game.add_state(state)
 
+    state = GameState('start2')
+    state.next = 'intro2'
+    state.sms_success_if([True])
+    state.voice_success_if([True])
+    state.text_fail = False
+    game.add_state(state)
+
     state = GameState('shortcut')
     state.next = 'part3'
     state.sms_success_if([True])
