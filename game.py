@@ -140,6 +140,19 @@ def add_story_to_game(game):
     state.voice_success_if(['1'])
     game.add_state(state)
 
+    state = GameState('intro2')
+    state.next = 'part3'
+    state.text = ("To get on the list for Twilio's SxSW party, "
+                  "you must answer three questions "
+                  "to prove your Twilio street cred. "
+                  "Do you accept this challenge?")
+    state.text_fail = message_sorry
+    state.sms_success_if(['y', 'yes', 'ok', 'okay', 'sure'])
+    state.voice_options(['1 to accept',
+                         '2 to decline'])
+    state.voice_success_if(['1'])
+    game.add_state(state)
+
     state = GameState('part1')
     state.next = 'part2'
     state.text = ('Challenge accepted. '
