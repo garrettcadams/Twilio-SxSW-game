@@ -54,6 +54,33 @@ def hello():
     return "Hello."
 
 
+@app.route("/stats/<number>")
+def stats(number):
+    states = ['total', 'intro', 'intro2', 'part1', 'part2', 'part3', 'end']
+    values = []
+    for state in states:
+        if state is 'total':
+            values.append(players.count())
+        else:
+            values.append(players.find({'state': state}).count())
+    height = values[0]
+    img = '<img src="'
+    img += "//chart.googleapis.com/chart"
+    img += "?chxl=0:|%s" % ('|'.join(states))
+    img += "&chxr=0,1,%s|1,0,%s" % (height, height)
+    img += "&chxt=x,y"
+    img += "&chbh=a,5,11"
+    img += "&chs=300x150"
+    img += "&cht=bvg"
+    img += "&chco=4D89F9"
+    img += "&chds=0,%s" % (height)
+    img += "&chd=t:%s" % ','.join(str(x) for x in values)
+    img += "&chtt=Progress"
+    img += '" />'
+    return "<html><body>%s</body></html>" % img
+
+
+
 @app.route("/sms", methods=['POST'])
 def sms():
     game = create_game(type='sms')
