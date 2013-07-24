@@ -13,3 +13,5 @@ To deploy to Heroku:
  4. heroku config MONGO_URL=<valid mongodb url>
  5. git push heroku master
  6. heroku open
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/9eac20d0c7ff046169c9ae870c5a1039 "githalytics.com")](http://githalytics.com/jpf/Twilio-SxSW-game)
